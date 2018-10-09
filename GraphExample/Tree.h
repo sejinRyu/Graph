@@ -4,42 +4,42 @@
 #include <queue>
 #include <vector>
 
-namespace Tree
+namespace tree
 {
-	static class Tree
+	class tree
 	{
 	public:
 		template<typename T>
-		static void PrintPreOrder(Node<T>& root_node)
+		static void print_pre_order(node<T>& root_node)
 		{
-			std::cout <<root_node.GetDepth()<<" : "<< root_node << std::endl;
-			for (size_t i = 0; i < root_node.Size(); i++)
+			std::cout <<root_node.get_depth()<<" : "<< root_node << std::endl;
+			for (size_t i = 0; i < root_node.size(); i++)
 			{
-				PrintPreOrder(root_node[i]);
+				print_pre_order(root_node[i]);
 			}
 		}
 
 		template<typename T>
-		static void PrintLevelOrder(Node<T>& root_node)
+		static void print_level_order(node<T>& root_node)
 		{
-			std::queue<Node<T>* > q;
+			std::queue<node<T>* > q;
 			q.push(&root_node);
 			
-			int depth = root_node.GetDepth();
+			int depth = root_node.get_depth();
 
 			while (!q.empty())
 			{
-				Node<T>& node = *q.front();
+				node<T>& node = *q.front();
 				q.pop();
 
-				if (depth != node.GetDepth())
+				if (depth != node.get_depth())
 				{
-					depth = node.GetDepth();
+					depth = node.get_depth();
 					std::cout << std::endl;
 				}
 				std::cout << node << ' ';
 
-				for (size_t i = 0; i < node.Size(); i++)
+				for (size_t i = 0; i < node.size(); i++)
 				{
 					q.push(&node[i]);
 				}

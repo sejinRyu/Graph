@@ -2,63 +2,38 @@
 #include <vector>
 #include <iostream>
 
-namespace Graph
+namespace graph
 {
 	template <typename T>
-	using Matrix = std::vector<std::vector<T> >;
+	using matrix = std::vector<std::vector<T> >;
 
-	class AdjacencyMatrix : public Matrix<int>
+	class adjacency_matrix : public matrix<int>
 	{
 	private:
 
 	public:
-		using Vertex = unsigned int;
-		enum Weight : int
+		using vertex = unsigned int;
+		enum weight : int
 		{
 			inf = INT32_MAX
 		};
 
-		void Init(size_t size)
-		{
-			this->Matrix<int>::assign(size, std::vector<int>(size, Weight::inf));
-			for (size_t i = 0; i < size; i++)
-				(*this)[i][i] = 0;
-		}
+		void init(const size_t size);
 
-		AdjacencyMatrix() :Matrix<int>()
-		{
+		adjacency_matrix() = default;
 
-		}
+		adjacency_matrix(const size_t size);
 
-		AdjacencyMatrix(size_t size)
-		{
-			this->Init(size);
-		}
+		void insert_edge(const vertex src, const vertex dst, const int weight = 1, const bool direction = true);
 
-		void InsertEdge(const Vertex src, const Vertex dst, int weight = 1, bool direction = true)
-		{
-			(*this)[src][dst] = weight;
-
-			//무방향일때 - 대각선축으로 대칭
-			if (!direction)
-				(*this)[dst][src] = weight;
-		}
-
-		void DeleteEdge(const Vertex src, const Vertex dst, bool direction = true)
-		{
-			this->InsertEdge(src, dst, Weight::inf, direction);
-		}
+		void delete_edge(const vertex src, const vertex dst, const bool direction = true);
 
 		//return weight
-		const int GetWeight(const Vertex src, const Vertex dst)
-		{
-			return (*this)[src][dst];
-		}
-
+		int get_weight(const vertex src, const vertex dst);
 	};
 
 	template<typename T>
-	std::ostream& operator<<(std::ostream& os, Matrix<T>& mat)
+	std::ostream& operator<<(std::ostream& os, matrix<T>& mat)
 	{
 		for (const auto& vec : mat)
 		{
@@ -71,4 +46,4 @@ namespace Graph
 		return os;
 	}
 
-}
+};

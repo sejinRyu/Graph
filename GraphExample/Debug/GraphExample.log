@@ -1,3 +1,2 @@
-﻿  GraphExample.cpp
-c:\users\ryu\documents\visual studio 2017\projects\graphexample\graphexample\tree.h(52): warning C4091: 'static ': 변수를 선언하지 않으면 'Tree::Tree' 왼쪽은 무시됩니다.
+﻿  main.cpp
   GraphExample.vcxproj -> C:\Users\Ryu\Documents\Visual Studio 2017\Projects\GraphExample\Debug\GraphExample.exe

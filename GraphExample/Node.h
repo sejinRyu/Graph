@@ -2,101 +2,134 @@
 #include <memory>
 #include <vector>
 
-namespace Tree
+namespace tree
 {
 	template<typename T>
-	class Node
+	class node
 	{
 	private:
-		T data;
-		std::vector<std::unique_ptr<Node<T> > > sub_tree;
-		const size_t depth_level;
+		T data_;
+		std::vector<std::unique_ptr<node<T> > > sub_tree_;
+		const size_t depth_level_;
 
-		Node(const T& data, const size_t depth) : data(data), depth_level(depth)
-		{
+		node(const T& data, const size_t depth);
 
-		}
-
-		Node(T&& data, const size_t depth) : data(data), depth_level(depth)
-		{
-
-		}
+		node(T&& data, const size_t depth);
 
 	public:
-		using ValueType = T;
+		using value_type = T;
 
-		void InsertNode(const T& data)
-		{
-			this->sub_tree.push_back(std::unique_ptr<Node<T> >(new Node<T>(data, this->depth_level + 1)));
-			return;
-		}
-		
-		void InsertNode(T&& data)
-		{
-			this->sub_tree.push_back(std::unique_ptr<Node<T> >(new Node<T>(std::move(data), this->depth_level + 1)));
-			return;
-		}
+		void insert_node(const T& data);
 
-		void DeleteNode(const size_t index)
-		{
-			if (this->sub_tree.size() <= index)
-				throw std::out_of_range("out_of_range");
+		void insert_node(T&& data);
 
-			(*this)[index].DeleteAllNode();
+		void delete_node(const size_t index);
 
+		void delete_all_node();
 
-			this->sub_tree[index].reset();
-			this->sub_tree.erase(this->sub_tree.begin() + index);
-		}
+		node<T>& operator[](const size_t index);
 
-		void DeleteAllNode()
-		{
-			for (auto& var : this->sub_tree)
-			{
-				var->DeleteAllNode();
-				var.reset();
-			}
-			this->sub_tree.erase(this->sub_tree.begin(), this->sub_tree.end());
-		}
+		const size_t size() const;
 
-		Node<T>& operator[](const size_t index)
-		{
-			if (this->sub_tree.size() <= index)
-				throw std::out_of_range("out_of_range");
-			return *this->sub_tree[index].get();
-		}
+		node<T>& operator=(const T& data);
 
-		const size_t Size() const
-		{
-			return this->sub_tree.size();
-		}
+		operator T&();
 
-		Node<T>& operator=(const T& data)
-		{
-			this->data = data;
-			return *this;
-		}
+		node(const T& data);
 
-		operator T&()
-		{
-			return this->data;
-		}
+		node(T&& data);
 
-		Node(const T& data) :data(data), depth_level(0)
-		{
-
-		}
-
-		Node(T&& data) :data(data), depth_level(0)
-		{
-
-		}
-
-		const size_t GetDepth() const
-		{
-			return this->depth_level;
-		}
-
+		size_t get_depth() const;
 	};
 
+	template <typename T>
+	node<T>::node(const T& data, const size_t depth): data_(data), depth_level_(depth)
+	{
+	}
+
+	template <typename T>
+	node<T>::node(T&& data, const size_t depth): data_(data), depth_level_(depth)
+	{
+	}
+
+	template <typename T>
+	void node<T>::insert_node(const T& data)
+	{
+		this->sub_tree_.push_back(std::unique_ptr<node<T>>(new node<T>(data, this->depth_level_ + 1)));
+		return;
+	}
+
+	template <typename T>
+	void node<T>::insert_node(T&& data)
+	{
+		this->sub_tree_.push_back(std::unique_ptr<node<T>>(new node<T>(std::move(data), this->depth_level_ + 1)));
+		return;
+	}
+
+	template <typename T>
+	void node<T>::delete_node(const size_t index)
+	{
+		if (this->sub_tree_.size() <= index)
+			throw std::out_of_range("out_of_range");
+
+		(*this)[index].DeleteAllNode();
+
+
+		this->sub_tree_[index].reset();
+		this->sub_tree_.erase(this->sub_tree_.begin() + index);
+	}
+
+	template <typename T>
+	void node<T>::delete_all_node()
+	{
+		for (auto& var : this->sub_tree_)
+		{
+			var->DeleteAllNode();
+			var.reset();
+		}
+		this->sub_tree_.erase(this->sub_tree_.begin(), this->sub_tree_.end());
+	}
+
+	template <typename T>
+	node<T>& node<T>::operator[](const size_t index)
+	{
+		if (this->sub_tree_.size() <= index)
+			throw std::out_of_range("out_of_range");
+		return *this->sub_tree_[index].get();
+	}
+
+	template <typename T>
+	const size_t node<T>::size() const
+	{
+		return this->sub_tree_.size();
+	}
+
+	template <typename T>
+	node<T>& node<T>::operator=(const T& data)
+	{
+		this->data_ = data;
+		return *this;
+	}
+
+	template <typename T>
+	node<T>::operator T&()
+	{
+		return this->data_;
+	}
+
+	template <typename T>
+	node<T>::node(const T& data): data_(data), depth_level_(0)
+	{
+	}
+
+	template <typename T>
+	node<T>::node(T&& data): data_(data), depth_level_(0)
+	{
+	}
+
+	template <typename T>
+	size_t node<T>::get_depth() const
+	{
+		return this->depth_level_;
+	}
 }
